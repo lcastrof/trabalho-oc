@@ -13,27 +13,22 @@ using namespace std;
 
 int PC = 0; // inicializando PC (lembrar de multiplicar/dividir por 4 para acessar corretamente as informações)
 
-void estagio_1(){
-  MemoriaDeInstrucoes *memoria_de_instrucoes = new MemoriaDeInstrucoes();
-
+void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   int proximoPC = somaPC(PC);
   long long int instrucao = memoria_de_instrucoes->getInstrucao(PC);
 
   if_id.proximoPC = proximoPC;
   if_id.instrucao = instrucao;
 
-  cout << "---------- Estágio 1 ----------" << endl;
+  cout << "---------- Estagio 1 ----------" << endl;
   cout << "IF_ID: " << endl;
   cout << "proximoPC: " << if_id.proximoPC << endl;
   cout << "instrucao: " << if_id.instrucao << endl;
 }
 
-void estagio_2(){
+void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   // Decodifica instruções, lê registradores
   // Define unidade de controle
-  UnidadeDeControle *unidade = new UnidadeDeControle();
-  BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
-
   ElementosInstrucao el =  decodificaInstrucao(if_id.instrucao);
 
   unidade->analisaInstrucao(el.opcode);
@@ -45,6 +40,18 @@ void estagio_2(){
   id_ex.proximoPC = if_id.proximoPC;
   id_ex.readData1 = conteudoReg1;
   id_ex.readData2 = conteudoReg2;
+  id_ex.instruction_15_0 = el.address;
+  id_ex.instruction_20_16 = el.rt;
+  id_ex.instruction_15_11 = el.rd;
+
+  cout << "---------- Estagio 2 ----------" << endl;
+  cout << "ID_EX: " << endl;
+  cout << "proximoPC: " << id_ex.proximoPC << endl;
+  cout << "readData1: " << id_ex.readData1 << endl;
+  cout << "readData2: " << id_ex.readData2 << endl;
+  cout << "instruction_15_0(address): " << id_ex.instruction_15_0 << endl;
+  cout << "instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
+  cout << "instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
 }
 
 void estagio_3(){
@@ -67,29 +74,33 @@ void estagio_6(){
 
 int main()
 {  
-  MemoriaDeInstrucoes *mem_inst = new MemoriaDeInstrucoes(); // onde serão armazenadas as sequências de instruções
-
+  // Definindo estruturas
+  MemoriaDeInstrucoes *memoria_de_instrucoes = new MemoriaDeInstrucoes();
+  UnidadeDeControle *unidade = new UnidadeDeControle();
+  BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
+  
   // leitura do arquivo
   ifstream arquivo;
   arquivo.open("comandos.txt");
-  cout << "entrou" << endl;
 
   if (arquivo.is_open()) {
     string str;
     int count = 0;
     while(getline(arquivo, str)) {
+      cout << "linha " << count << " = " << str << endl;
       if (str.length() != 32) {
         cout << "Encontrada instrucao invalida(diferente de 32 bits) no arquivo selecionado, na linha " << count + 1 << "." << endl;
         cout << "Favor ajustar e tentar novamente." << endl;
         exit(0);
       }
       long long int valor_convertido = converteBinarioParaInteiro(str);
-      mem_inst->insereInstrucao(count, valor_convertido);
+      memoria_de_instrucoes->insereInstrucao(count, valor_convertido);
       count += 1;
     }
   }
   arquivo.close();
 
+  
   // Loop
   // while (PC < 128*4) {
   //   estagio_1();
@@ -99,15 +110,16 @@ int main()
   //   estagio_5();
   // }
 
-  mem_inst->imprimeNInstrucoes(2); // apenas para checar se está correto
+  memoria_de_instrucoes->imprimeNInstrucoes(2); // apenas para checar se está correto
 
   cout << "Exemplo de instrucao decodificada: " << endl;
-  ElementosInstrucao el =  decodificaInstrucao(mem_inst->getInstrucao(0));
+  ElementosInstrucao el =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(0));
   cout << "el: " << endl;
   cout << el.opcode << endl;
   cout << el.rt << endl;
   cout << el.rs << endl;
   cout << el.rd << endl;
 
-  estagio_1();
+  estagio_1(memoria_de_instrucoes);
+  estagio_2(unidade, bancoReg);
 }
