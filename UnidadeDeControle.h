@@ -72,6 +72,88 @@ class UnidadeDeControle {
         ALUOp1 = true;
       } 
     }
+
+    bool getRegWrite(){
+      return RegWrite;
+    }
+
+    bool setRegWrite(bool RegWrite){
+      this->RegWrite = RegWrite;
+      return;
+    }
+
+    bool getRegDst(){
+      return RegDst;
+    }
+
+    bool setRegDst(bool RegDst){
+      this->RegDst = RegDst;
+      return;
+    }
+
+    bool getALUSrc(){
+      return ALUSrc;
+    }
+
+    bool setALUSrc(bool ALUSrc){
+      this->ALUSrc = ALUSrc;
+      return;
+    }
+
+    bool getALUOp0(){
+      return ALUOp0;
+    }
+
+    bool setALUOp0(bool ALUOp0){
+      this->ALUOp0 = ALUOp0;
+      return;
+    }
+    
+    bool getALUOp1(){
+      return ALUOp1;
+    }
+
+    bool setALUOp1(bool ALUOp1){
+      this->ALUOp1 = ALUOp1;
+      return;
+    }
+
+    bool getPCSrc(){
+      return PCSrc;
+    }
+
+    bool setPCSrc(bool PCSrc){
+      this->PCSrc = PCSrc;
+      return;
+    }
+
+    bool getMemRead(){
+      return MemRead;
+    }
+
+    bool setMemRead(bool MemRead){
+      this->MemRead = MemRead;
+      return;
+    }
+
+    bool getMemWrite(){
+      return MemWrite;
+    }
+
+    bool setMemWrite(bool MemWrite){
+      this->MemWrite = MemWrite;
+      return;
+    }
+
+    bool getMemtoReg(){
+      return MemtoReg;
+    }
+
+    bool setMemtoReg(bool MemtoReg){
+      this->MemtoReg = MemtoReg;
+      return;
+    }
+
 };
 
 #endif // UNIDADEDECONTROLE_H_INCLUDED
