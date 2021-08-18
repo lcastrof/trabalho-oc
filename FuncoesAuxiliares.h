@@ -24,13 +24,19 @@ struct ID_EX {
 ID_EX id_ex;
 
 struct EX_MEM {
-  
+  int addResult;
+  int ALUResult;
+  int readData2;
+  int MuxRegDst;
 };
+EX_MEM ex_mem;
 
 struct MEM_WB {
-  
+  int readData;
+  int ALUResult;
+  int MuxRegDst;
 };
-
+MEM_WB mem_wb;
 
 struct ElementosInstrucao {
   int opcode;
