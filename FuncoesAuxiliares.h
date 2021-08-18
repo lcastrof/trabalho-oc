@@ -8,20 +8,28 @@
 using namespace std;
 
 struct IF_ID {
-
-}
+  int proximoPC;
+  long long int instrucao;
+};
+IF_ID if_id;
 
 struct ID_EX {
-  
-}
+  int proximoPC;
+  int readData1;
+  int readData2;
+  int instruction_15_0;
+  int instruction_20_16;
+  int instruction_15_11;
+};
+ID_EX id_ex;
 
 struct EX_MEM {
   
-}
+};
 
 struct MEM_WB {
   
-}
+};
 
 
 struct ElementosInstrucao {
@@ -36,6 +44,10 @@ struct ElementosInstrucao {
 
 long long int converteBinarioParaInteiro(string strBin) {
   return stoll(strBin, 0, 2);
+}
+
+int somaPC(int PC) {
+  return PC + 4;
 }
 
 ElementosInstrucao decodificaInstrucao(long long int instruct) {
