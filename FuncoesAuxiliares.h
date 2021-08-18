@@ -7,6 +7,23 @@
 
 using namespace std;
 
+struct IF_ID {
+
+}
+
+struct ID_EX {
+  
+}
+
+struct EX_MEM {
+  
+}
+
+struct MEM_WB {
+  
+}
+
+
 struct ElementosInstrucao {
   int opcode;
   int rs;

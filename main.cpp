@@ -45,3 +45,33 @@ int main()
   cout << el.rs << endl;
   cout << el.rd << endl;
 }
+
+
+
+
+void estagio_1(){
+
+}
+
+void estagio_2(){
+ // Decodifica instruções, lê registradores
+ // Define unidade de controle
+
+
+}
+
+void estagio_3(){
+ // Execução ou cálculo do endereço 
+ // ALU
+ // 
+}
+
+void estagio_4(){
+ // Acessa memória de dados (criar classe)
+ // Atualiza PCSrc na unidade de controle
+}
+
+void estagio_5(){
+ // Escrita do resultado
+
+}
