@@ -49,6 +49,7 @@ struct ElementosInstrucao {
 };
 
 long long int converteBinarioParaInteiro(string strBin) {
+  cout << "conversao: " << strBin << " para decimal: " << stoi(strBin, 0, 2) << endl;
   return stoll(strBin, 0, 2);
 }
 
