@@ -77,81 +77,72 @@ class UnidadeDeControle {
       return RegWrite;
     }
 
-    bool setRegWrite(bool RegWrite){
+    void setRegWrite(bool RegWrite){
       this->RegWrite = RegWrite;
-      return;
     }
-
+    
     bool getRegDst(){
       return RegDst;
     }
 
-    bool setRegDst(bool RegDst){
+    void setRegDst(bool RegDst){
       this->RegDst = RegDst;
-      return;
     }
 
     bool getALUSrc(){
       return ALUSrc;
     }
 
-    bool setALUSrc(bool ALUSrc){
+    void setALUSrc(bool ALUSrc){
       this->ALUSrc = ALUSrc;
-      return;
     }
 
     bool getALUOp0(){
       return ALUOp0;
     }
 
-    bool setALUOp0(bool ALUOp0){
+    void setALUOp0(bool ALUOp0){
       this->ALUOp0 = ALUOp0;
-      return;
     }
     
     bool getALUOp1(){
       return ALUOp1;
     }
 
-    bool setALUOp1(bool ALUOp1){
+    void setALUOp1(bool ALUOp1){
       this->ALUOp1 = ALUOp1;
-      return;
     }
 
     bool getPCSrc(){
       return PCSrc;
     }
 
-    bool setPCSrc(bool PCSrc){
+    void setPCSrc(bool PCSrc){
       this->PCSrc = PCSrc;
-      return;
     }
 
     bool getMemRead(){
       return MemRead;
     }
 
-    bool setMemRead(bool MemRead){
+    void setMemRead(bool MemRead){
       this->MemRead = MemRead;
-      return;
     }
 
     bool getMemWrite(){
       return MemWrite;
     }
 
-    bool setMemWrite(bool MemWrite){
+    void setMemWrite(bool MemWrite){
       this->MemWrite = MemWrite;
-      return;
     }
 
     bool getMemtoReg(){
       return MemtoReg;
     }
 
-    bool setMemtoReg(bool MemtoReg){
+    void setMemtoReg(bool MemtoReg){
       this->MemtoReg = MemtoReg;
-      return;
     }
 
 };
