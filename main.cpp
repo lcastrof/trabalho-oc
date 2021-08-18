@@ -8,6 +8,7 @@
 #include "BancoDeRegistradores.h"
 #include "UnidadeDeControle.h"
 #include "FuncoesAuxiliares.h"
+#include "ALU.h"
 
 using namespace std;
 
@@ -78,6 +79,7 @@ int main()
   MemoriaDeInstrucoes *memoria_de_instrucoes = new MemoriaDeInstrucoes();
   UnidadeDeControle *unidade = new UnidadeDeControle();
   BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
+  ALU *alu = new ALU();
   
   // leitura do arquivo
   ifstream arquivo;
