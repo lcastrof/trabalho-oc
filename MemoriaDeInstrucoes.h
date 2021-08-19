@@ -9,6 +9,7 @@ using namespace std;
 class MemoriaDeInstrucoes {
   private:
     long long int *instrucoes;
+    
 
   public:
     MemoriaDeInstrucoes() {

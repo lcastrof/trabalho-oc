@@ -45,15 +45,26 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   id_ex.instruction_20_16 = el.rt;
   id_ex.instruction_15_11 = el.rd;
 
+  //Atualizar unidade de controle de acordo com a instrução lida
+  cout << el.desc << endl;
+  unidade->atualizaUnidade(el.desc);
+
+
   cout << "---------- Estagio 2 ----------" << endl;
+  cout << "Instrucao de tipo " << el.retornaTipo() << endl;
   cout << "ID_EX: " << endl;
   cout << "proximoPC: " << id_ex.proximoPC << endl;
   cout << "readData1: " << id_ex.readData1 << endl;
   cout << "readData2: " << id_ex.readData2 << endl;
   cout << "instruction_15_0(address): " << id_ex.instruction_15_0 << endl;
   cout << "instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
-  cout << "instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
+  
+  if(el.desc == 1 || el.desc == 2 || el.desc == 3 || 
+     el.desc == 4 || el.desc == 5 || el.desc == 6 ){
+    cout << "instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
+  } 
 }
+
 
 void estagio_3(){
  // Execução ou cálculo do endereço 
@@ -112,15 +123,37 @@ int main()
   //   estagio_5();
   // }
 
-  memoria_de_instrucoes->imprimeNInstrucoes(2); // apenas para checar se está correto
+  memoria_de_instrucoes->imprimeNInstrucoes(3); // apenas para checar se está correto
 
   cout << "Exemplo de instrucao decodificada: " << endl;
   ElementosInstrucao el =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(0));
   cout << "el: " << endl;
   cout << el.opcode << endl;
-  cout << el.rt << endl;
   cout << el.rs << endl;
+  cout << el.rt << endl;
   cout << el.rd << endl;
+  cout << el.shamt << endl;
+  cout << el.funct << endl;
+
+  // cout << "Exemplo de instrucao decodificada: " << endl;
+  // ElementosInstrucao el1 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(4));
+  // cout << "el: " << endl;
+  // cout << el1.opcode << endl;
+  // cout << el1.rs << endl;
+  // cout << el1.rt << endl;
+  // cout << el1.rd << endl;
+  // cout << el1.shamt << endl;
+  // cout << el1.funct << endl;
+
+  // cout << "Exemplo de instrucao decodificada: " << endl;
+  // ElementosInstrucao el2 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(8));
+  // cout << "el: " << endl;
+  // cout << el2.opcode << endl;
+  // cout << el2.rs << endl;
+  // cout << el2.rt << endl;
+  // cout << el2.rd << endl;
+  // cout << el2.shamt << endl;
+  // cout << el2.funct << endl;
 
   estagio_1(memoria_de_instrucoes);
   estagio_2(unidade, bancoReg);

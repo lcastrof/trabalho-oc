@@ -46,10 +46,39 @@ struct ElementosInstrucao {
   int shamt;
   int funct;
   int address;
+
+  int desc;
+  //descrições abaixo
+  string retornaTipo(){
+
+    switch(desc){
+      case 1: return "add";
+      case 2: return "sub";
+      case 3: return "and";
+      case 4: return "or";
+      case 5: return "slt";
+      case 6: return "sll";
+      case 7: return "addi";
+      case 8: return "lw";
+      case 9: return "sw";
+      case 10: return "beq";
+      case 11: return "bne";
+      case 12: return "j";
+      case 13: return "jr";
+      case 14: return "jal";
+      default: return "";
+      }
+  
+  }
 };
 
+
+
+
+
+
 long long int converteBinarioParaInteiro(string strBin) {
-  cout << "conversao: " << strBin << " para decimal: " << stoi(strBin, 0, 2) << endl;
+  cout << "conversao: " << strBin << " para decimal: " << stoll(strBin, 0, 2) << endl;
   return stoll(strBin, 0, 2);
 }
 
@@ -78,6 +107,7 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
   elementos.rt = rt;
 
   if (opcode == 0) { // instrução tipo R
+
     string mascara_rd = "00000000000000001111100000000000";
     int rd = (instruct&converteBinarioParaInteiro(mascara_rd))>>11;
     cout << "rd " << rd << endl;
@@ -92,17 +122,64 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
     int funct = (instruct&converteBinarioParaInteiro(mascara_funct));
     cout << "funct " << funct << endl;
     elementos.funct = funct;
-  } else if (opcode == 2) { // instrução tipo J
+
+    //identificar a operação do tipo R
+    if(funct == converteBinarioParaInteiro("100000")){
+      elementos.desc = 1;
+    } else if (funct == converteBinarioParaInteiro("100010")){
+      elementos.desc = 2;
+    } else if(funct == converteBinarioParaInteiro("100100")){
+      elementos.desc = 3;
+    } else if (funct == converteBinarioParaInteiro("100101")){
+      elementos.desc = 4;
+    } else if(funct == converteBinarioParaInteiro("101010")){
+      elementos.desc = 5;
+    } else if(funct == converteBinarioParaInteiro("000000")){
+      elementos.desc = 6;
+    } else {
+      elementos.desc = -1;
+    }
+
+  } 
+  
+  
+  else if (opcode == 2) { // instrução tipo J
+
     string mascara_jump_address = "00000011111111111111111111111111";
     int jump_address = (instruct&converteBinarioParaInteiro(mascara_jump_address));
     cout << "jump_address " << jump_address << endl;
     elementos.address = jump_address;
-  } else { // instrução tipo I
+  } 
+  
+  
+  else { // instrução tipo I
+
     string mascara_address = "00000000000000001111111111111111";
     int address = (instruct&converteBinarioParaInteiro(mascara_address));
     cout << "address " << address << endl;
     elementos.address = address;
+
+    // se for lw
+    if(opcode == converteBinarioParaInteiro("100011")){
+      elementos.desc = 8;
+    // se for sw
+    } else if (opcode == converteBinarioParaInteiro("101011") ) {
+      elementos.desc = 9;
+    // se for addi
+    } else if (opcode == converteBinarioParaInteiro("001000")) {
+      elementos.desc = 7;
+    // se for beq 
+    } else if (opcode == converteBinarioParaInteiro("000100")){
+      elementos.desc = 10;
+    // se for bne
+    } else if (opcode == converteBinarioParaInteiro("000101")){
+      elementos.desc = 11;
+    } else {
+      elementos.desc = -1;
+    }
+
   }
+
 
   return elementos;
 }

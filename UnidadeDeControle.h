@@ -65,13 +65,95 @@ class UnidadeDeControle {
       MemtoReg = false;
     };
 
-    void analisaInstrucao(int opcode) {
+    string analisaInstrucao(int opcode) {
+      string tipo;
       if (opcode == 0) { // Tipo R
         RegDst = true;
         RegWrite = true;
         ALUOp1 = true;
-      } 
+        tipo = "R";
+      }
+      else{ // Enquanto não implementamos J
+
+        tipo = 'I';
+      }
+    
+      return tipo;
     }
+
+    void statusUnidade(){
+
+      cout << "RegDst: " << RegDst << endl;
+      cout << "RegWrite: " << RegWrite << endl;   
+      cout << "ALUSrc: " << ALUSrc << endl; 
+      cout << "ALUOp0: " << ALUOp0 << endl; 
+      cout << "ALUOp1: " << ALUOp1 << endl; 
+      cout << "PCSrc: " << PCSrc << endl; 
+      cout << "MemRead: " << MemRead << endl; 
+      cout << "MemWrite: " << MemWrite << endl; 
+      cout << "MemtoReg: " << MemtoReg << endl; 
+      
+    }
+
+
+    void atualizaUnidade(int instrucao){
+
+      // se instrução é do tipo R
+      if(instrucao == 1 || instrucao == 2 ||
+         instrucao == 3 || instrucao == 4 ||
+         instrucao == 5 || instrucao == 6){
+
+        RegDst = true;
+        RegWrite = true;
+        ALUSrc = false;
+        ALUOp0 = false;
+        ALUOp1 = true;
+        PCSrc = false;
+        MemRead = false;
+        MemWrite = false;
+        MemtoReg = true;
+
+     // se instrução for lw   
+     } else if (instrucao == 8){
+        RegDst = false;
+        RegWrite = true;
+        ALUSrc = true;
+        ALUOp0 = false;
+        ALUOp1 = false;
+        PCSrc = false;
+        MemRead = true;
+        MemWrite = false;
+        MemtoReg = false;
+
+     // se instrução for sw
+     } else if (instrucao == 9){
+        
+        RegWrite = false;
+        ALUSrc = true;
+        ALUOp0 = false;
+        ALUOp1 = false;
+        PCSrc = false;
+        MemRead = false;
+        MemWrite = true;
+
+     // se instrucao for beq
+     } else if (instrucao == 10){
+       
+        RegWrite = false;
+        ALUSrc = false;
+        ALUOp0 = true;
+        ALUOp1 = false;
+        PCSrc = false;
+        MemRead = false;
+        MemWrite = true;
+
+     } else {
+       cout << "Operação ainda não implementada" << endl;
+     }
+
+    }
+
+
 
     bool getRegWrite(){
       return RegWrite;
