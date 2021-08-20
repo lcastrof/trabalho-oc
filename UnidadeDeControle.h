@@ -86,7 +86,7 @@ class UnidadeDeControle {
 
     void statusUnidade(){
       
-      cout << "   ------ CONTROLE ------ " << endl;
+      cout << "\n   ------ CONTROLE ------ " << endl;
       cout << " # RegDst: " << RegDst << endl;
       cout << " # RegWrite: " << RegWrite << endl;   
       cout << " # ALUSrc: " << ALUSrc << endl; 

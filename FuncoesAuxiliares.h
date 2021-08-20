@@ -75,7 +75,7 @@ struct ElementosInstrucao {
 
 
 long long int converteBinarioParaInteiro(string strBin) {
-  cout << "conversao: " << strBin << " para decimal: " << stoll(strBin, 0, 2) << endl;
+  //cout << "conversao: " << strBin << " para decimal: " << stoll(strBin, 0, 2) << endl;
   return stoll(strBin, 0, 2);
 }
 
@@ -88,6 +88,8 @@ long long int extendeSinal(long int numero) {
   } else {
     extensor = "0000000000000000";
   }
+
+  cout << "\n ... Extensao de Sinal ... " << endl;
 
   string binarioExtendido = extensor + numBin;
   cout << "Bin ext: " << binarioExtendido << endl;
@@ -124,6 +126,8 @@ long long int addEnderecos() {
 ElementosInstrucao decodificaInstrucao(long long int instruct) {
   ElementosInstrucao elementos;
   
+  cout << "\n ...Decodificando instrucao... " << endl;
+
   // opcode (como sempre são os primeiros 6 bits, não é necessário uma máscara para recuperá-lo)
   int opcode = (instruct>>26);
   cout << "opcode " << opcode << endl;

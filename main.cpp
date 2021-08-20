@@ -24,7 +24,7 @@ void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   if_id.instrucao = instrucao;
 
   cout << "\n---------- Estagio 1 ----------" << endl;
-  cout << " -> IF_ID: " << endl;
+  cout << "\n | IF_ID | " << endl;
   cout << " -> proximoPC: " << if_id.proximoPC << endl;
   cout << " -> instrucao: " << if_id.instrucao << endl;
 }
@@ -48,13 +48,13 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   id_ex.instruction_15_11 = el.rd;
 
   //Atualizar unidade de controle de acordo com a instrução lida
-  cout << el.desc << endl;
   unidade->atualizaUnidade(el.desc);
 
 
   cout << "\n---------- Estagio 2 ----------" << endl;
-  cout << " -> Instrucao de tipo " << el.retornaTipo() << endl;
-  cout << " -> ID_EX: " << endl;
+  cout << " -> Instrucao identificada: " << el.retornaTipo() << endl;
+    unidade->statusUnidade();
+  cout << "\n | ID_EX | " << endl;
   cout << " -> proximoPC: " << id_ex.proximoPC << endl;
   cout << " -> readData1: " << id_ex.readData1 << endl;
   cout << " -> readData2: " << id_ex.readData2 << endl;
@@ -65,7 +65,7 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
     cout << " -> instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
   } 
 
-  unidade->statusUnidade();
+
 }
 
 
@@ -100,7 +100,7 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu){
   }
 
   cout << "\n---------- Estagio 3 ----------" << endl;
-  cout << " -> EX/MEM: " << endl;
+  cout << "\n | EX/MEM | " << endl;
   cout << " -> addResult: " << ex_mem.addResult << endl;
   cout << " -> readData2: " << ex_mem.readData2 << endl;
   cout << " -> MuxRegDst: " << ex_mem.MuxRegDst << endl;
@@ -128,10 +128,14 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
   mem_wb.MuxRegDst = ex_mem.MuxRegDst;
 
   cout << "\n---------- Estagio 4 ----------" << endl;
-  cout << " -> MEM/WB: " << endl;
+  cout << "\n | MEM/WB | " << endl;
   cout << " -> readData: " << mem_wb.readData << endl;
   cout << " -> ALUResult: " << mem_wb.ALUResult << endl;
   cout << " -> MuxRegDst: " << mem_wb.MuxRegDst << endl;
+
+  // Falta atualizar o PCSrc de acordo com o Branch e Zero da aLU
+
+  unidade->statusUnidade();
 
 
 }
@@ -148,7 +152,7 @@ void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
   bancoReg->escreveBanco(mem_wb.MuxRegDst, wData, unidade->getRegWrite());
 
   cout << "\n---------- Estagio 5 ----------" << endl;
-  cout << " não sei oq rola aqui " << endl;
+  cout << "-> wData:  " << wData << endl;
 }
 
 
