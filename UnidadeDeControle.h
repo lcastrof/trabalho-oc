@@ -85,16 +85,17 @@ class UnidadeDeControle {
     }
 
     void statusUnidade(){
-
-      cout << "# RegDst: " << RegDst << endl;
-      cout << "# RegWrite: " << RegWrite << endl;   
-      cout << "# ALUSrc: " << ALUSrc << endl; 
-      cout << "# ALUOp0: " << ALUOp0 << endl; 
-      cout << "# ALUOp1: " << ALUOp1 << endl; 
-      cout << "# PCSrc: " << PCSrc << endl; 
-      cout << "# MemRead: " << MemRead << endl; 
-      cout << "# MemWrite: " << MemWrite << endl; 
-      cout << "# MemtoReg: " << MemtoReg << endl; 
+      
+      cout << "   ------ CONTROLE ------ " << endl;
+      cout << " # RegDst: " << RegDst << endl;
+      cout << " # RegWrite: " << RegWrite << endl;   
+      cout << " # ALUSrc: " << ALUSrc << endl; 
+      cout << " # ALUOp0: " << ALUOp0 << endl; 
+      cout << " # ALUOp1: " << ALUOp1 << endl; 
+      cout << " # Branch: " << Branch << endl; 
+      cout << " # MemRead: " << MemRead << endl; 
+      cout << " # MemWrite: " << MemWrite << endl; 
+      cout << " # MemtoReg: " << MemtoReg << endl; 
 
     }
 

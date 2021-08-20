@@ -23,10 +23,10 @@ void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   if_id.proximoPC = proximoPC;
   if_id.instrucao = instrucao;
 
-  cout << "---------- Estagio 1 ----------" << endl;
-  cout << "IF_ID: " << endl;
-  cout << "proximoPC: " << if_id.proximoPC << endl;
-  cout << "instrucao: " << if_id.instrucao << endl;
+  cout << "\n---------- Estagio 1 ----------" << endl;
+  cout << " -> IF_ID: " << endl;
+  cout << " -> proximoPC: " << if_id.proximoPC << endl;
+  cout << " -> instrucao: " << if_id.instrucao << endl;
 }
 
 void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
@@ -52,26 +52,59 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   unidade->atualizaUnidade(el.desc);
 
 
-  cout << "---------- Estagio 2 ----------" << endl;
-  cout << "Instrucao de tipo " << el.retornaTipo() << endl;
-  cout << "ID_EX: " << endl;
-  cout << "proximoPC: " << id_ex.proximoPC << endl;
-  cout << "readData1: " << id_ex.readData1 << endl;
-  cout << "readData2: " << id_ex.readData2 << endl;
-  cout << "instruction_15_0(address extendido): " << id_ex.instruction_15_0 << endl;
-  cout << "instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
+  cout << "\n---------- Estagio 2 ----------" << endl;
+  cout << " -> Instrucao de tipo " << el.retornaTipo() << endl;
+  cout << " -> ID_EX: " << endl;
+  cout << " -> proximoPC: " << id_ex.proximoPC << endl;
+  cout << " -> readData1: " << id_ex.readData1 << endl;
+  cout << " -> readData2: " << id_ex.readData2 << endl;
+  cout << " -> instruction_15_0(address extendido): " << id_ex.instruction_15_0 << endl;
+  cout << " -> instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
   
-  if(el.desc == 1 || el.desc == 2 || el.desc == 3 || 
-     el.desc == 4 || el.desc == 5 || el.desc == 6 ){
-    cout << "instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
+  if(el.desc >= 1 && el.desc <= 6){
+    cout << " -> instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
   } 
+
+  unidade->statusUnidade();
 }
 
 
-void estagio_3(){
+
+
+void estagio_3(UnidadeDeControle *unidade, ALU *alu){
  // Execução ou cálculo do endereço 
  // ALU
- // 
+
+  // Resultado do Add
+  ex_mem.addResult = addEnderecos();
+
+  // Passando readData2 de ID/EX para EX/MEM
+  ex_mem.readData2 = id_ex.readData2;
+
+  // Resultado da ALU
+  int entradaALU1 = id_ex.readData1;
+  if(unidade->getALUSrc()){
+    int entradaALU2 = id_ex.instruction_15_0;
+  } else {
+    int entradaALU2 = id_ex.readData2;
+  }
+
+  ex_mem.ALUResult = 0; 
+
+
+  // Passando Mux de acordo com controle
+  if(unidade->getRegDst()){
+    ex_mem.MuxRegDst = id_ex.instruction_15_11;
+  } else {
+    ex_mem.MuxRegDst = id_ex.instruction_20_16;
+  }
+
+  cout << "\n---------- Estagio 3 ----------" << endl;
+  cout << " -> EX/MEM: " << endl;
+  cout << " -> addResult: " << ex_mem.addResult << endl;
+  cout << " -> readData2: " << ex_mem.readData2 << endl;
+  cout << " -> MuxRegDst: " << ex_mem.MuxRegDst << endl;
+
 }
 
 void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
@@ -93,6 +126,14 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
   mem_wb.readData = readData;
   mem_wb.ALUResult = ex_mem.ALUResult;
   mem_wb.MuxRegDst = ex_mem.MuxRegDst;
+
+  cout << "\n---------- Estagio 4 ----------" << endl;
+  cout << " -> MEM/WB: " << endl;
+  cout << " -> readData: " << mem_wb.readData << endl;
+  cout << " -> ALUResult: " << mem_wb.ALUResult << endl;
+  cout << " -> MuxRegDst: " << mem_wb.MuxRegDst << endl;
+
+
 }
 
 void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
@@ -105,6 +146,9 @@ void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
   }
 
   bancoReg->escreveBanco(mem_wb.MuxRegDst, wData, unidade->getRegWrite());
+
+  cout << "\n---------- Estagio 5 ----------" << endl;
+  cout << " não sei oq rola aqui " << endl;
 }
 
 
@@ -189,4 +233,7 @@ int main()
 
   estagio_1(memoria_de_instrucoes);
   estagio_2(unidade, bancoReg);
+  estagio_3(unidade, alu);
+  //estagio_4(memoria_de_dados, unidade, PC);
+  estagio_5(bancoReg, unidade);
 }

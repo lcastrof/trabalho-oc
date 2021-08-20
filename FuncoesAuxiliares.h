@@ -25,7 +25,7 @@ struct ID_EX {
 ID_EX id_ex;
 
 struct EX_MEM {
-  int addResult;
+  long long int addResult;
   int ALUResult;
   int readData2;
   int MuxRegDst;
