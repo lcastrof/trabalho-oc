@@ -14,6 +14,7 @@ class ALU{
         // R[rd] = R[rs] + R[rt]
         int add(int entrada1, int entrada2){
             return entrada1 + entrada2;
+            //conversões
         }
 
         // R[rd] = R[rs] - R[rt]
@@ -23,12 +24,12 @@ class ALU{
 
         // R[rd] = R[rs] & R[rt]
         int operacaoAND(int entrada1,int entrada2){
-            return (entrada1 && entrada2);
+            return (entrada1&entrada2);
         }
 
         // R[rd] = R[rs] | R[rt]
         int operacaoOR(int entrada1,int entrada2){
-            return (entrada1 || entrada2);
+            return (entrada1||entrada2);
         }
 
         // R[rd] = (R[rs] < R[rt]) ? 1 : 0
@@ -36,15 +37,22 @@ class ALU{
             return entrada1 < entrada2 ? 1 : 0;
         }
 
+        // R[rd] = R[rt]<<shamt
+        int shiftLeftLogical(int entrada1, int entrada2){
+            return entrada1<<entrada2;
+        }
 
-    int operacaoALU(int entrada1, int entrada2, int desc){
-        switch(desc){
+        
+
+
+    int operacaoALU(int entrada1, int entrada2, ElementosInstrucao el){
+        switch(el.desc){
             case 1: return add(entrada1, entrada2);// "add";
             case 2: return sub(entrada1, entrada2);// "sub";
             case 3: return operacaoAND(entrada1, entrada2);//  "and";
             case 4: return operacaoOR(entrada1, entrada2); //  "or";
             case 5: return setLessThan(entrada1, entrada2); //  "slt";
-            case 6: return 0;//  "sll";
+            case 6: return shiftLeftLogical(entrada1, el.shamt);//  "sll";
             case 7: return add(entrada1, entrada2);// "addi";
             case 8: return add(entrada1, entrada2);//  "lw";
             case 9: return add(entrada1, entrada2);// "sw";

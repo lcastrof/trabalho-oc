@@ -29,12 +29,10 @@ void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   cout << " -> instrucao: " << if_id.instrucao << endl;
 }
 
-int estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
+ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   // Decodifica instruções, lê registradores
   // Define unidade de controle
   ElementosInstrucao el =  decodificaInstrucao(if_id.instrucao);
-
-  unidade->analisaInstrucao(el.opcode);
 
   int conteudoReg1;
   int conteudoReg2;
@@ -66,13 +64,13 @@ int estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   } 
 
 
-  return el.desc;
+  return el;
 }
 
 
 
 
-void estagio_3(UnidadeDeControle *unidade, ALU *alu, int desc){
+void estagio_3(UnidadeDeControle *unidade, ALU *alu, ElementosInstrucao instrucao){
 
   
  // Execução ou cálculo do endereço 
@@ -95,8 +93,10 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu, int desc){
 
   // Função que entrega resultado da ALU de acordo com a instrução
 
-  ex_mem.ALUResult = alu->operacaoALU(entradaALU1, entradaALU2, desc); 
-
+  ex_mem.ALUResult = alu->operacaoALU(entradaALU1, entradaALU2, instrucao); 
+  if(ex_mem.ALUResult == 0){
+    unidade->setPCSrc(1 && unidade->getBranch());
+  }
 
   // Passando Mux de acordo com controle
   if(unidade->getRegDst()){
@@ -128,6 +128,8 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
     *PC = somaPC(*PC);
   }
 
+
+
   // Atualiza dados para a próxima etapa   
   mem_wb.readData = readData;
   mem_wb.ALUResult = ex_mem.ALUResult;
@@ -139,9 +141,7 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
   cout << " -> ALUResult: " << mem_wb.ALUResult << endl;
   cout << " -> MuxRegDst: " << mem_wb.MuxRegDst << endl;
 
-  // Falta atualizar o PCSrc de acordo com o Branch e Zero da aLU
-
-
+  // Falta atualizar o PCSrc de acordo com o Branch e Zero da ALU
 }
 
 void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
@@ -239,11 +239,11 @@ int main()
   // cout << el2.shamt << endl;
   // cout << el2.funct << endl;
 
-  int desc;
+  ElementosInstrucao instrucao;
 
   estagio_1(memoria_de_instrucoes);
-  desc = estagio_2(unidade, bancoReg);
-  estagio_3(unidade, alu, desc);
+  instrucao = estagio_2(unidade, bancoReg);
+  estagio_3(unidade, alu, instrucao);
   estagio_4(memoria_de_dados, unidade, &PC);
   estagio_5(bancoReg, unidade);
 }

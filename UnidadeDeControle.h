@@ -68,21 +68,6 @@ class UnidadeDeControle {
       Branch = false;
     };
 
-    string analisaInstrucao(int opcode) {
-      string tipo;
-      if (opcode == 0) { // Tipo R
-        RegDst = true;
-        RegWrite = true;
-        ALUOp1 = true;
-        tipo = "R";
-      }
-      else{ // Enquanto não implementamos J
-
-        tipo = 'I';
-      }
-    
-      return tipo;
-    }
 
     void statusUnidade(){
       
@@ -249,6 +234,11 @@ class UnidadeDeControle {
     void setMemtoReg(bool MemtoReg){
       this->MemtoReg = MemtoReg;
     }
+
+    bool getBranch(){
+      return Branch;
+    }
+
 
 };
 
