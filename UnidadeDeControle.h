@@ -151,9 +151,15 @@ class UnidadeDeControle {
 
      // se for addi 
      } else if (instrucao == 7) {
-       RegWrite = true;
-       RegDst = false;
-       MemtoReg = false;
+        RegDst = false;
+        RegWrite = true;
+        ALUSrc = true;
+        ALUOp0 = true;
+        ALUOp1 = true;
+        MemRead = false;
+        MemWrite = false;
+        MemtoReg = false;
+        Branch = false;
     // se for bne
      } else if (instrucao == 11){
        

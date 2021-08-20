@@ -29,7 +29,7 @@ void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   cout << " -> instrucao: " << if_id.instrucao << endl;
 }
 
-void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
+int estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   // Decodifica instruções, lê registradores
   // Define unidade de controle
   ElementosInstrucao el =  decodificaInstrucao(if_id.instrucao);
@@ -66,15 +66,18 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   } 
 
 
+  return el.desc;
 }
 
 
 
 
-void estagio_3(UnidadeDeControle *unidade, ALU *alu){
+void estagio_3(UnidadeDeControle *unidade, ALU *alu, int desc){
+
+  
  // Execução ou cálculo do endereço 
  // ALU
-
+  cout << "\n---------- Estagio 3 ----------" << endl;
   // Resultado do Add
   ex_mem.addResult = addEnderecos();
 
@@ -83,13 +86,16 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu){
 
   // Resultado da ALU
   int entradaALU1 = id_ex.readData1;
+  int entradaALU2;
   if(unidade->getALUSrc()){
-    int entradaALU2 = id_ex.instruction_15_0;
+    entradaALU2 = id_ex.instruction_15_0;
   } else {
-    int entradaALU2 = id_ex.readData2;
+    entradaALU2 = id_ex.readData2;
   }
 
-  ex_mem.ALUResult = 0; 
+  // Função que entrega resultado da ALU de acordo com a instrução
+
+  ex_mem.ALUResult = alu->operacaoALU(entradaALU1, entradaALU2, desc); 
 
 
   // Passando Mux de acordo com controle
@@ -99,7 +105,7 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu){
     ex_mem.MuxRegDst = id_ex.instruction_20_16;
   }
 
-  cout << "\n---------- Estagio 3 ----------" << endl;
+  
   cout << "\n | EX/MEM | " << endl;
   cout << " -> addResult: " << ex_mem.addResult << endl;
   cout << " -> readData2: " << ex_mem.readData2 << endl;
@@ -135,8 +141,6 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
 
   // Falta atualizar o PCSrc de acordo com o Branch e Zero da aLU
 
-  unidade->statusUnidade();
-
 
 }
 
@@ -169,7 +173,7 @@ int main()
   
   // leitura do arquivo
   ifstream arquivo;
-  arquivo.open("comandos.txt");
+  arquivo.open("comandos_A5S28.txt");
 
   if (arquivo.is_open()) {
     string str;
@@ -235,9 +239,11 @@ int main()
   // cout << el2.shamt << endl;
   // cout << el2.funct << endl;
 
+  int desc;
+
   estagio_1(memoria_de_instrucoes);
-  estagio_2(unidade, bancoReg);
-  estagio_3(unidade, alu);
-  //estagio_4(memoria_de_dados, unidade, PC);
+  desc = estagio_2(unidade, bancoReg);
+  estagio_3(unidade, alu, desc);
+  estagio_4(memoria_de_dados, unidade, &PC);
   estagio_5(bancoReg, unidade);
 }

@@ -119,7 +119,7 @@ long long int addEnderecos() {
   if (valorModificadoBin[0] == '1') {
     deslocamento *= -1;
   }
-
+  cout << " .. Entrada SLL2 no Add: " << deslocamento << " .. " << endl; 
   return id_ex.proximoPC + deslocamento;
 }
 
