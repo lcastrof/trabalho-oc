@@ -98,7 +98,7 @@ class UnidadeDeControle {
         Branch = false;
         MemRead = false;
         MemWrite = false;
-        MemtoReg = true;
+        MemtoReg = false;
 
      // se instrução for lw   
      } else if (instrucao == 8){

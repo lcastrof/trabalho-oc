@@ -79,6 +79,28 @@ long long int converteBinarioParaInteiro(string strBin) {
   return stoll(strBin, 0, 2);
 }
 
+int converteNumeroDeEnderecoParaInt(int numero) {
+  string numBin = bitset<16>(numero).to_string();
+
+  if (numBin[0] == '1') {
+    int numConvertido = converteBinarioParaInteiro(bitset<16>(numero*(-1)).to_string());
+    return numConvertido * (-1);
+  }
+
+  return numero;
+}
+
+int converteNumeroDeEnderecoExtendidoParaInt(int numero) {
+  string numBin = bitset<32>(numero).to_string();
+
+  if (numBin[0] == '1') {
+    int numConvertido = converteBinarioParaInteiro(bitset<16>(numero*(-1)).to_string());
+    return numConvertido * (-1);
+  }
+
+  return numero;
+}
+
 long long int extendeSinal(long int numero) {
   string numBin = bitset<16>(numero).to_string();
   string extensor;
@@ -95,8 +117,6 @@ long long int extendeSinal(long int numero) {
   cout << "Bin ext: " << binarioExtendido << endl;
 
   long long int convertido =  converteBinarioParaInteiro(binarioExtendido);
-
-  cout << "Convertido: " << convertido << endl;
 
   return convertido;
 }
@@ -211,7 +231,7 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
 
     string mascara_address = "00000000000000001111111111111111";
     int address = (instruct&converteBinarioParaInteiro(mascara_address));
-    cout << "address " << address << endl;
+    cout << "address " << converteNumeroDeEnderecoParaInt(address) << endl;
     elementos.address = address;
 
     // se for lw

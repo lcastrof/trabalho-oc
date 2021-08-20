@@ -13,6 +13,7 @@ class BancoDeRegistradores {
   public:
     BancoDeRegistradores() {
       registradores = new int[32];
+      registradores[0] = 0;
     };
 
     void imprimeRegistradores() {

@@ -14,7 +14,11 @@ class ALU{
         // R[rd] = R[rs] + R[rt]
         int add(int entrada1, int entrada2){
             return entrada1 + entrada2;
-            //conversões
+        }
+        
+        int addTipoI(int entrada1, int entrada2){
+            entrada2 = converteNumeroDeEnderecoParaInt(entrada2);
+            return entrada1 + entrada2;
         }
 
         // R[rd] = R[rs] - R[rt]
@@ -29,7 +33,7 @@ class ALU{
 
         // R[rd] = R[rs] | R[rt]
         int operacaoOR(int entrada1,int entrada2){
-            return (entrada1||entrada2);
+            return (entrada1|entrada2);
         }
 
         // R[rd] = (R[rs] < R[rt]) ? 1 : 0
@@ -53,9 +57,9 @@ class ALU{
             case 4: return operacaoOR(entrada1, entrada2); //  "or";
             case 5: return setLessThan(entrada1, entrada2); //  "slt";
             case 6: return shiftLeftLogical(entrada1, el.shamt);//  "sll";
-            case 7: return add(entrada1, entrada2);// "addi";
-            case 8: return add(entrada1, entrada2);//  "lw";
-            case 9: return add(entrada1, entrada2);// "sw";
+            case 7: return addTipoI(entrada1, entrada2);// "addi";
+            case 8: return addTipoI(entrada1, entrada2);//  "lw";
+            case 9: return addTipoI(entrada1, entrada2);// "sw";
             case 10: return sub(entrada1, entrada2);//  "beq";
             case 11: return add(entrada1, entrada2);//  "bne";
             case 12: return 0;//  "j";

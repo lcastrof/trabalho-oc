@@ -33,6 +33,8 @@ ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *b
   // Decodifica instruções, lê registradores
   // Define unidade de controle
   ElementosInstrucao el =  decodificaInstrucao(if_id.instrucao);
+  cout << "\n---------- Estagio 2 ----------" << endl;
+  cout << " -> Instrucao identificada: " << el.retornaTipo() << endl;
 
   int conteudoReg1;
   int conteudoReg2;
@@ -49,8 +51,6 @@ ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *b
   unidade->atualizaUnidade(el.desc);
 
 
-  cout << "\n---------- Estagio 2 ----------" << endl;
-  cout << " -> Instrucao identificada: " << el.retornaTipo() << endl;
     unidade->statusUnidade();
   cout << "\n | ID_EX | " << endl;
   cout << " -> proximoPC: " << id_ex.proximoPC << endl;
@@ -96,7 +96,8 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu, ElementosInstrucao instruca
   ex_mem.ALUResult = alu->operacaoALU(entradaALU1, entradaALU2, instrucao); 
   if(ex_mem.ALUResult == 0){
     unidade->setPCSrc(1 && unidade->getBranch());
-  }
+  } 
+  // addi $zero, $s0, -16
 
   // Passando Mux de acordo com controle
   if(unidade->getRegDst()){
@@ -113,7 +114,7 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu, ElementosInstrucao instruca
 
 }
 
-void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
+void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade){
   // Acessa memória de dados (criar classe)
   // Atualiza PCSrc na unidade de controle
   // Atualiza PC
@@ -123,9 +124,9 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
 
   // Atualiza PC
   if (unidade->getPCSrc()) {
-    *PC = ex_mem.addResult;
+    PC = ex_mem.addResult;
   } else {
-    *PC = somaPC(*PC);
+    PC = somaPC(PC);
   }
 
 
@@ -157,6 +158,7 @@ void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
 
   cout << "\n---------- Estagio 5 ----------" << endl;
   cout << "-> wData:  " << wData << endl;
+  cout << "-> wReg:  " << mem_wb.MuxRegDst << endl;
 }
 
 
@@ -173,7 +175,7 @@ int main()
   
   // leitura do arquivo
   ifstream arquivo;
-  arquivo.open("comandos_A5S28.txt");
+  arquivo.open("comandos.txt");
 
   if (arquivo.is_open()) {
     string str;
@@ -192,58 +194,11 @@ int main()
   }
   arquivo.close();
 
-  
-  // Loop
-  // while (PC < 128*4) {
-  //   estagio_1();
-  //   estagio_2();
-  //   estagio_3();
-  //   estagio_4();
-  //   estagio_5();
-  // }
-
-  memoria_de_instrucoes->imprimeNInstrucoes(3); // apenas para checar se está correto
-
-  cout << "Exemplo de instrucao decodificada: " << endl;
-  ElementosInstrucao el =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(0));
-  cout << "el: " << endl;
-  cout << el.opcode << endl;
-  cout << el.rs << endl;
-  cout << el.rt << endl;
-  cout << el.rd << endl;
-  cout << el.shamt << endl;
-  cout << el.funct << endl;
-  cout << "Address: " << el.address << endl;
-  string converted = "1111111111111111";
-  cout << "Address decodificado: " << converted.append(bitset<16>(el.address).to_string()) << endl;
-  cout << "Primeiro: " << converted[0] << endl;
-  cout << "Segundo: " << (converteBinarioParaInteiro("010")<<2) << endl;
-
-  // cout << "Exemplo de instrucao decodificada: " << endl;
-  // ElementosInstrucao el1 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(4));
-  // cout << "el: " << endl;
-  // cout << el1.opcode << endl;
-  // cout << el1.rs << endl;
-  // cout << el1.rt << endl;
-  // cout << el1.rd << endl;
-  // cout << el1.shamt << endl;
-  // cout << el1.funct << endl;
-
-  // cout << "Exemplo de instrucao decodificada: " << endl;
-  // ElementosInstrucao el2 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(8));
-  // cout << "el: " << endl;
-  // cout << el2.opcode << endl;
-  // cout << el2.rs << endl;
-  // cout << el2.rt << endl;
-  // cout << el2.rd << endl;
-  // cout << el2.shamt << endl;
-  // cout << el2.funct << endl;
-
   ElementosInstrucao instrucao;
 
   estagio_1(memoria_de_instrucoes);
   instrucao = estagio_2(unidade, bancoReg);
   estagio_3(unidade, alu, instrucao);
-  estagio_4(memoria_de_dados, unidade, &PC);
+  estagio_4(memoria_de_dados, unidade);
   estagio_5(bancoReg, unidade);
 }
