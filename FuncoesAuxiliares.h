@@ -153,12 +153,14 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
       elementos.desc = 5;
     } else if(funct == converteBinarioParaInteiro("000000")){
       elementos.desc = 6;
+    } else if(funct == converteBinarioParaInteiro("001000")){
+      elementos.desc = 13; 
     } else {
       elementos.desc = -1;
     }
 
   } 
-  
+
   
   else if (opcode == 2) { // instrução tipo J
 
@@ -166,6 +168,20 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
     int jump_address = (instruct&converteBinarioParaInteiro(mascara_jump_address));
     cout << "jump_address " << jump_address << endl;
     elementos.address = jump_address;
+
+    // se for j
+    if(opcode == converteBinarioParaInteiro("000010")){
+      elementos.desc = 12;
+    // se for jal 
+    } else if (opcode == converteBinarioParaInteiro("000011")){
+      elementos.desc = 14;
+    } else {
+      elementos.desc = -1;
+    }
+    
+    
+
+
   } 
   
   
@@ -196,8 +212,7 @@ ElementosInstrucao decodificaInstrucao(long long int instruct) {
     }
 
   }
-
-
+  
   return elementos;
 }
 
