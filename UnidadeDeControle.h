@@ -52,6 +52,8 @@ class UnidadeDeControle {
     // 0 - R
     bool MemtoReg;
 
+    bool Branch;
+
   public:
     UnidadeDeControle() {
       RegDst = false;
@@ -63,6 +65,7 @@ class UnidadeDeControle {
       MemRead = false;
       MemWrite = false;
       MemtoReg = false;
+      Branch = false;
     };
 
     string analisaInstrucao(int opcode) {
@@ -83,32 +86,30 @@ class UnidadeDeControle {
 
     void statusUnidade(){
 
-      cout << "RegDst: " << RegDst << endl;
-      cout << "RegWrite: " << RegWrite << endl;   
-      cout << "ALUSrc: " << ALUSrc << endl; 
-      cout << "ALUOp0: " << ALUOp0 << endl; 
-      cout << "ALUOp1: " << ALUOp1 << endl; 
-      cout << "PCSrc: " << PCSrc << endl; 
-      cout << "MemRead: " << MemRead << endl; 
-      cout << "MemWrite: " << MemWrite << endl; 
-      cout << "MemtoReg: " << MemtoReg << endl; 
-      
+      cout << "# RegDst: " << RegDst << endl;
+      cout << "# RegWrite: " << RegWrite << endl;   
+      cout << "# ALUSrc: " << ALUSrc << endl; 
+      cout << "# ALUOp0: " << ALUOp0 << endl; 
+      cout << "# ALUOp1: " << ALUOp1 << endl; 
+      cout << "# PCSrc: " << PCSrc << endl; 
+      cout << "# MemRead: " << MemRead << endl; 
+      cout << "# MemWrite: " << MemWrite << endl; 
+      cout << "# MemtoReg: " << MemtoReg << endl; 
+
     }
 
 
     void atualizaUnidade(int instrucao){
 
-      // se instrução é do tipo R
-      if(instrucao == 1 || instrucao == 2 ||
-         instrucao == 3 || instrucao == 4 ||
-         instrucao == 5 || instrucao == 6){
+      // se instrução é do tipo R (menos jr)
+      if(instrucao >= 1 & instrucao <= 6){
 
         RegDst = true;
         RegWrite = true;
         ALUSrc = false;
         ALUOp0 = false;
         ALUOp1 = true;
-        PCSrc = false;
+        Branch = false;
         MemRead = false;
         MemWrite = false;
         MemtoReg = true;
@@ -120,7 +121,7 @@ class UnidadeDeControle {
         ALUSrc = true;
         ALUOp0 = false;
         ALUOp1 = false;
-        PCSrc = false;
+        Branch = false;
         MemRead = true;
         MemWrite = false;
         MemtoReg = false;
@@ -132,7 +133,7 @@ class UnidadeDeControle {
         ALUSrc = true;
         ALUOp0 = false;
         ALUOp1 = false;
-        PCSrc = false;
+        Branch = false;
         MemRead = false;
         MemWrite = true;
 
@@ -143,12 +144,27 @@ class UnidadeDeControle {
         ALUSrc = false;
         ALUOp0 = true;
         ALUOp1 = false;
-        PCSrc = false;
+        Branch = true;
         MemRead = false;
         MemWrite = true;
 
+     // se for addi 
+     } else if (instrucao == 7) {
+       RegWrite = true;
+       RegDst = false;
+       MemtoReg = false;
+    // se for bne
+     } else if (instrucao == 11){
+       
+        RegWrite = false;
+        ALUSrc = false;
+        ALUOp0 = true;
+        ALUOp1 = false;
+        MemRead = false;
+        MemWrite = true;
+     // se for j, jr ou jal 
      } else {
-       cout << "Operação ainda não implementada" << endl;
+       cout << "Instrução ainda não implementada" << endl;
      }
 
     }
