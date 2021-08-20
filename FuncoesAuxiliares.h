@@ -103,6 +103,24 @@ int somaPC(int PC) {
   return PC + 4;
 }
 
+long long int shiftLeft2(long long int valor) {
+  return valor<<2;
+}
+
+long long int addEnderecos() {
+  long long int valorModificado = shiftLeft2(id_ex.instruction_15_0);
+  string valorModificadoBin = bitset<32>(valorModificado).to_string();
+  string mascaraValor = "00000000000000011111111111111111";
+
+  int deslocamento = (valorModificado&converteBinarioParaInteiro(mascaraValor));
+
+  if (valorModificadoBin[0] == '1') {
+    deslocamento *= -1;
+  }
+
+  return id_ex.proximoPC + deslocamento;
+}
+
 ElementosInstrucao decodificaInstrucao(long long int instruct) {
   ElementosInstrucao elementos;
   

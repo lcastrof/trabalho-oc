@@ -6,6 +6,7 @@
 #include <bitset>
 
 #include "MemoriaDeInstrucoes.h"
+#include "MemoriaDeDados.h"
 #include "BancoDeRegistradores.h"
 #include "UnidadeDeControle.h"
 #include "FuncoesAuxiliares.h"
@@ -73,15 +74,37 @@ void estagio_3(){
  // 
 }
 
-void estagio_4(){
- // Acessa memória de dados (criar classe)
- // Atualiza PCSrc na unidade de controle
- // Atualiza PC
+void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade, int *PC){
+  // Acessa memória de dados (criar classe)
+  // Atualiza PCSrc na unidade de controle
+  // Atualiza PC
+
+  // Realiza operações na memória de dados
+  int readData = memDados->operaDados(ex_mem.ALUResult, ex_mem.readData2, unidade->getMemWrite(), unidade->getMemRead());
+
+  // Atualiza PC
+  if (unidade->getPCSrc()) {
+    *PC = ex_mem.addResult;
+  } else {
+    *PC = somaPC(*PC);
+  }
+
+  // Atualiza dados para a próxima etapa   
+  mem_wb.readData = readData;
+  mem_wb.ALUResult = ex_mem.ALUResult;
+  mem_wb.MuxRegDst = ex_mem.MuxRegDst;
 }
 
-void estagio_6(){
- // Escrita do resultado
+void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
+  // Escrita do resultado
+  int wData;
+  if (unidade->getMemtoReg()) {
+    wData = mem_wb.readData;
+  } else {
+    wData = mem_wb.ALUResult;
+  }
 
+  bancoReg->escreveBanco(mem_wb.MuxRegDst, wData, unidade->getRegWrite());
 }
 
 
@@ -91,6 +114,7 @@ int main()
   MemoriaDeInstrucoes *memoria_de_instrucoes = new MemoriaDeInstrucoes();
   UnidadeDeControle *unidade = new UnidadeDeControle();
   BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
+  MemoriaDeDados *memoria_de_dados = new MemoriaDeDados();
   ALU *alu = new ALU();
 
   bancoReg->escreveBanco(17, 10, true);
@@ -138,10 +162,10 @@ int main()
   cout << el.shamt << endl;
   cout << el.funct << endl;
   cout << "Address: " << el.address << endl;
-  string converted = "0111111111111111";
+  string converted = "1111111111111111";
   cout << "Address decodificado: " << converted.append(bitset<16>(el.address).to_string()) << endl;
   cout << "Primeiro: " << converted[0] << endl;
-  cout << "Segundo: " << converted[1] << endl;
+  cout << "Segundo: " << (converteBinarioParaInteiro("010")<<2) << endl;
 
   // cout << "Exemplo de instrucao decodificada: " << endl;
   // ElementosInstrucao el1 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(4));
