@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <bitset>
 
 
 using namespace std;
@@ -73,13 +74,29 @@ struct ElementosInstrucao {
 };
 
 
-
-
-
-
 long long int converteBinarioParaInteiro(string strBin) {
   cout << "conversao: " << strBin << " para decimal: " << stoll(strBin, 0, 2) << endl;
   return stoll(strBin, 0, 2);
+}
+
+long long int extendeSinal(long int numero) {
+  string numBin = bitset<16>(numero).to_string();
+  string extensor;
+
+  if (numBin[0] == '1') { // negativo
+    extensor = "1111111111111111";
+  } else {
+    extensor = "0000000000000000";
+  }
+
+  string binarioExtendido = extensor + numBin;
+  cout << "Bin ext: " << binarioExtendido << endl;
+
+  long long int convertido =  converteBinarioParaInteiro(binarioExtendido);
+
+  cout << "Convertido: " << convertido << endl;
+
+  return convertido;
 }
 
 int somaPC(int PC) {

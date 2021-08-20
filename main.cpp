@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <bitset>
 
 #include "MemoriaDeInstrucoes.h"
 #include "BancoDeRegistradores.h"
@@ -41,7 +42,7 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   id_ex.proximoPC = if_id.proximoPC;
   id_ex.readData1 = conteudoReg1;
   id_ex.readData2 = conteudoReg2;
-  id_ex.instruction_15_0 = el.address;
+  id_ex.instruction_15_0 = extendeSinal(el.address) ;
   id_ex.instruction_20_16 = el.rt;
   id_ex.instruction_15_11 = el.rd;
 
@@ -56,7 +57,7 @@ void estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   cout << "proximoPC: " << id_ex.proximoPC << endl;
   cout << "readData1: " << id_ex.readData1 << endl;
   cout << "readData2: " << id_ex.readData2 << endl;
-  cout << "instruction_15_0(address): " << id_ex.instruction_15_0 << endl;
+  cout << "instruction_15_0(address extendido): " << id_ex.instruction_15_0 << endl;
   cout << "instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
   
   if(el.desc == 1 || el.desc == 2 || el.desc == 3 || 
@@ -91,6 +92,8 @@ int main()
   UnidadeDeControle *unidade = new UnidadeDeControle();
   BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
   ALU *alu = new ALU();
+
+  bancoReg->escreveBanco(17, 10, true);
   
   // leitura do arquivo
   ifstream arquivo;
@@ -134,6 +137,11 @@ int main()
   cout << el.rd << endl;
   cout << el.shamt << endl;
   cout << el.funct << endl;
+  cout << "Address: " << el.address << endl;
+  string converted = "0111111111111111";
+  cout << "Address decodificado: " << converted.append(bitset<16>(el.address).to_string()) << endl;
+  cout << "Primeiro: " << converted[0] << endl;
+  cout << "Segundo: " << converted[1] << endl;
 
   // cout << "Exemplo de instrucao decodificada: " << endl;
   // ElementosInstrucao el1 =  decodificaInstrucao(memoria_de_instrucoes->getInstrucao(4));
