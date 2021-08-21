@@ -205,7 +205,7 @@ int main()
         // leitura do arquivo
         try {
           ifstream arquivo;
-          arquivo.open("comandos_2.txt");
+          arquivo.open(nome_do_arquivo);
           count = 0;
 
 
@@ -280,7 +280,7 @@ int main()
       case 3:
         bancoReg->limpaBanco();
         memoria_de_dados->limpaMemoria();
-        cout << "Banco de Registradores e Memória de Dados limpos";
+        cout << "Banco de Registradores e Memoria de Dados limpos";
         break;
 
       case 4:
