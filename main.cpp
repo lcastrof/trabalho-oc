@@ -15,6 +15,7 @@
 using namespace std;
 
 int PC = 0; // inicializando PC (lembrar de multiplicar/dividir por 4 para acessar corretamente as informações)
+int clock = 1;
 
 void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   int proximoPC = somaPC(PC);
@@ -23,17 +24,18 @@ void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   if_id.proximoPC = proximoPC;
   if_id.instrucao = instrucao;
 
-  cout << "\n---------- Estagio 1 ----------" << endl;
+  cout << "\n---------- Estagio 1 ---------- C = " << clock << " --- " << endl;
   cout << "\n | IF_ID | " << endl;
   cout << " -> proximoPC: " << if_id.proximoPC << endl;
   cout << " -> instrucao: " << if_id.instrucao << endl;
+  clock++;
 }
 
 ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *bancoReg){
   // Decodifica instruções, lê registradores
   // Define unidade de controle
   ElementosInstrucao el =  decodificaInstrucao(if_id.instrucao);
-  cout << "\n---------- Estagio 2 ----------" << endl;
+  cout << "\n---------- Estagio 2 ---------- C = " << clock << " --- " << endl;
   cout << " -> Instrucao identificada: " << el.retornaTipo() << endl;
 
   int conteudoReg1;
@@ -65,7 +67,7 @@ ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *b
 
   cout << "Banco de Registradores: " << endl;
   bancoReg->imprimeRegistradores();
-
+  clock++;
 
   return el;
 }
@@ -78,7 +80,7 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu, ElementosInstrucao instruca
   
  // Execução ou cálculo do endereço 
  // ALU
-  cout << "\n---------- Estagio 3 ----------" << endl;
+  cout << "\n---------- Estagio 3 ---------- C = " << clock << " --- " << endl;
   // Resultado do Add
   ex_mem.addResult = addEnderecos();
 
@@ -112,8 +114,10 @@ void estagio_3(UnidadeDeControle *unidade, ALU *alu, ElementosInstrucao instruca
   
   cout << "\n | EX/MEM | " << endl;
   cout << " -> addResult: " << ex_mem.addResult << endl;
+  cout << " -> ALUResult: " << ex_mem.ALUResult << endl;
   cout << " -> readData2: " << ex_mem.readData2 << endl;
   cout << " -> MuxRegDst: " << ex_mem.MuxRegDst << endl;
+  clock++;
 
 }
 
@@ -133,19 +137,18 @@ void estagio_4(MemoriaDeDados *memDados, UnidadeDeControle *unidade){
   }
 
 
-
   // Atualiza dados para a próxima etapa   
   mem_wb.readData = readData;
   mem_wb.ALUResult = ex_mem.ALUResult;
   mem_wb.MuxRegDst = ex_mem.MuxRegDst;
 
-  cout << "\n---------- Estagio 4 ----------" << endl;
+  cout << "\n---------- Estagio 4 ---------- C = " << clock << " --- " << endl;
   cout << "\n | MEM/WB | " << endl;
   cout << " -> readData: " << mem_wb.readData << endl;
   cout << " -> ALUResult: " << mem_wb.ALUResult << endl;
   cout << " -> MuxRegDst: " << mem_wb.MuxRegDst << endl;
-
-  // Falta atualizar o PCSrc de acordo com o Branch e Zero da ALU
+  
+  clock++;
 }
 
 void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
@@ -159,12 +162,13 @@ void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
 
   bancoReg->escreveBanco(mem_wb.MuxRegDst, wData, unidade->getRegWrite());
 
-  cout << "\n---------- Estagio 5 ----------" << endl;
+  cout << "\n---------- Estagio 5 ---------- C = " << clock << " --- " << endl;
   cout << "-> wData:  " << wData << endl;
   cout << "-> wReg:  " << mem_wb.MuxRegDst << endl;
 
   cout << "Banco de Registradores: " << endl;
   bancoReg->imprimeRegistradores();
+  clock++;
 }
 
 
@@ -176,16 +180,16 @@ int main()
   BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
   MemoriaDeDados *memoria_de_dados = new MemoriaDeDados();
   ALU *alu = new ALU();
-
-  bancoReg->escreveBanco(17, 10, true);
-  
+ 
   // leitura do arquivo
   ifstream arquivo;
-  arquivo.open("comandos.txt");
+  arquivo.open("comandos_2.txt");
+
+  int count;
 
   if (arquivo.is_open()) {
     string str;
-    int count = 0;
+    count = 0;
     while(getline(arquivo, str)) {
       cout << "linha " << count << " = " << str << endl;
       if (str.length() != 32) {
@@ -202,9 +206,17 @@ int main()
 
   ElementosInstrucao instrucao;
 
+
+
+  while(PC < count*4){
+  
+  cout << "\n\n*** PC: " << PC << endl;
   estagio_1(memoria_de_instrucoes);
   instrucao = estagio_2(unidade, bancoReg);
   estagio_3(unidade, alu, instrucao);
   estagio_4(memoria_de_dados, unidade);
   estagio_5(bancoReg, unidade);
+
+  }
+
 }

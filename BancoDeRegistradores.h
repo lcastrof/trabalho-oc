@@ -13,12 +13,18 @@ class BancoDeRegistradores {
   public:
     BancoDeRegistradores() {
       registradores = new int[32];
-      registradores[0] = 0;
+      for(int i = 0; i < 32; i++){
+        registradores[i] = 0;
+      }
     };
 
     void imprimeRegistradores() {
       for (int i = 0; i < 32; i++) {
-        cout << "I[" << i << "] = " << registradores[i] << endl;
+        cout << "  |  " <<"R[" << i << "] = " << registradores[i];
+
+        if(i%4 == 0){
+          cout << endl;
+        }
       }
     };
     
@@ -31,7 +37,7 @@ class BancoDeRegistradores {
     };
 
     int escreveBanco(int wReg, int wData, int regWrite) {
-      if (wReg == 0 || (regWrite && !wReg)) return 0;
+      if (wReg == 0 || regWrite == 0) return 0;
       registradores[wReg] = wData;
       return 1;
     };

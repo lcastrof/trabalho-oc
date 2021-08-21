@@ -16,9 +16,12 @@ class MemoriaDeDados {
     };
 
     int operaDados(int address, int writeData, bool memWrite, bool memRead) {
+      
+
+
       if (!memWrite && !memRead) return 0;
 
-      int indice = address/4;
+      int indice = address;
       if (memWrite) {
         memoria[indice] = writeData;
 

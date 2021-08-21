@@ -110,7 +110,7 @@ class UnidadeDeControle {
         Branch = false;
         MemRead = true;
         MemWrite = false;
-        MemtoReg = false;
+        MemtoReg = true;
 
      // se instrução for sw
      } else if (instrucao == 9){
