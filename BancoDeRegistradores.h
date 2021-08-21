@@ -21,7 +21,7 @@ class BancoDeRegistradores {
         cout << "I[" << i << "] = " << registradores[i] << endl;
       }
     };
-    // Basicamente o que ele explicou na aula, deve mudar mais pra frente
+    
     int leBanco(int reg1, int reg2, int *rd1, int *rd2) {
       if (reg1 < 0 || reg1 >= 32) return 0;
 

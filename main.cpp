@@ -43,7 +43,7 @@ ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *b
   id_ex.proximoPC = if_id.proximoPC;
   id_ex.readData1 = conteudoReg1;
   id_ex.readData2 = conteudoReg2;
-  id_ex.instruction_15_0 = extendeSinal(el.address) ;
+  id_ex.instruction_15_0 = extendeSinal(el.address);
   id_ex.instruction_20_16 = el.rt;
   id_ex.instruction_15_11 = el.rd;
 
@@ -56,12 +56,15 @@ ElementosInstrucao estagio_2(UnidadeDeControle *unidade, BancoDeRegistradores *b
   cout << " -> proximoPC: " << id_ex.proximoPC << endl;
   cout << " -> readData1: " << id_ex.readData1 << endl;
   cout << " -> readData2: " << id_ex.readData2 << endl;
-  cout << " -> instruction_15_0(address extendido): " << id_ex.instruction_15_0 << endl;
+  cout << " -> instruction_15_0(address extendido): " << converteNumeroDeEnderecoExtendidoParaInt(id_ex.instruction_15_0) << endl;
   cout << " -> instruction_20_16(rt): " << id_ex.instruction_20_16 << endl;
   
   if(el.desc >= 1 && el.desc <= 6){
     cout << " -> instruction_15_11(rd): " << id_ex.instruction_15_11 << endl;
   } 
+
+  cout << "Banco de Registradores: " << endl;
+  bancoReg->imprimeRegistradores();
 
 
   return el;
@@ -159,6 +162,9 @@ void estagio_5(BancoDeRegistradores *bancoReg, UnidadeDeControle *unidade){
   cout << "\n---------- Estagio 5 ----------" << endl;
   cout << "-> wData:  " << wData << endl;
   cout << "-> wReg:  " << mem_wb.MuxRegDst << endl;
+
+  cout << "Banco de Registradores: " << endl;
+  bancoReg->imprimeRegistradores();
 }
 
 

@@ -18,7 +18,7 @@ struct ID_EX {
   int proximoPC;
   int readData1;
   int readData2;
-  int instruction_15_0;
+  long long int instruction_15_0;
   int instruction_20_16;
   int instruction_15_11;
 };
@@ -90,11 +90,11 @@ int converteNumeroDeEnderecoParaInt(int numero) {
   return numero;
 }
 
-int converteNumeroDeEnderecoExtendidoParaInt(int numero) {
+int converteNumeroDeEnderecoExtendidoParaInt(long long int numero) {
   string numBin = bitset<32>(numero).to_string();
 
   if (numBin[0] == '1') {
-    int numConvertido = converteBinarioParaInteiro(bitset<16>(numero*(-1)).to_string());
+    int numConvertido = converteBinarioParaInteiro(bitset<32>(numero*(-1)).to_string());
     return numConvertido * (-1);
   }
 
@@ -125,21 +125,9 @@ int somaPC(int PC) {
   return PC + 4;
 }
 
-long long int shiftLeft2(long long int valor) {
-  return valor<<2;
-}
-
 long long int addEnderecos() {
-  long long int valorModificado = shiftLeft2(id_ex.instruction_15_0);
-  string valorModificadoBin = bitset<32>(valorModificado).to_string();
-  string mascaraValor = "00000000000000011111111111111111";
-
-  int deslocamento = (valorModificado&converteBinarioParaInteiro(mascaraValor));
-
-  if (valorModificadoBin[0] == '1') {
-    deslocamento *= -1;
-  }
-  cout << " .. Entrada SLL2 no Add: " << deslocamento << " .. " << endl; 
+  long long int deslocamento = converteNumeroDeEnderecoExtendidoParaInt(id_ex.instruction_15_0<<2);
+  
   return id_ex.proximoPC + deslocamento;
 }
 
