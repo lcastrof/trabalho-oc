@@ -30,6 +30,12 @@ class MemoriaDeDados {
 
       return memoria[indice];
     };
+
+    void limpaMemoria() {
+      for (int i = 0; i < 128; i++) {
+        memoria[i] = 0;
+      }
+    }
 };
 
 #endif // MEMORIADEDADOS_H_INCLUDED

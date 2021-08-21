@@ -16,6 +16,8 @@ using namespace std;
 
 int PC = 0; // inicializando PC (lembrar de multiplicar/dividir por 4 para acessar corretamente as informações)
 int clock = 1;
+int count = 0;
+
 
 void estagio_1(MemoriaDeInstrucoes *memoria_de_instrucoes){
   int proximoPC = somaPC(PC);
@@ -180,43 +182,114 @@ int main()
   BancoDeRegistradores *bancoReg = new BancoDeRegistradores();
   MemoriaDeDados *memoria_de_dados = new MemoriaDeDados();
   ALU *alu = new ALU();
- 
-  // leitura do arquivo
-  ifstream arquivo;
-  arquivo.open("comandos_2.txt");
 
-  int count;
+  while (true) {
+    int resposta;
+    cout << endl;
+    cout << "------------------------" << endl;
+    cout << "-------- Menu ----------" << endl;
+    cout << "------------------------" << endl;
+    cout << "Favor selecione uma opcao: " << endl;
+    cout << "1 - Fazer carga do arquivo" << endl;
+    cout << "2 - Inicio da execucao" << endl;
+    cout << "3 - Reset de dados" << endl;
+    cout << "4 - Sair" << endl;
+    cin >> resposta;
 
-  if (arquivo.is_open()) {
-    string str;
-    count = 0;
-    while(getline(arquivo, str)) {
-      cout << "linha " << count << " = " << str << endl;
-      if (str.length() != 32) {
-        cout << "Encontrada instrucao invalida(diferente de 32 bits) no arquivo selecionado, na linha " << count + 1 << "." << endl;
-        cout << "Favor ajustar e tentar novamente." << endl;
+    string nome_do_arquivo;
+    switch (resposta) {
+      case 1:
+        cout << "Digite o nome do arquivo: " << endl;
+        cin >> nome_do_arquivo;
+
+        // leitura do arquivo
+        try {
+          ifstream arquivo;
+          arquivo.open("comandos_2.txt");
+          count = 0;
+
+
+          if (arquivo.is_open()) {
+            string str;
+            while(getline(arquivo, str)) {
+              cout << "linha " << count << " = " << str << endl;
+              if (str.length() != 32) {
+                cout << "Encontrada instrucao invalida(diferente de 32 bits) no arquivo selecionado, na linha " << count + 1 << "." << endl;
+                cout << "Favor ajustar e tentar novamente." << endl;
+                exit(0);
+              }
+              long long int valor_convertido = converteBinarioParaInteiro(str);
+              memoria_de_instrucoes->insereInstrucao(count, valor_convertido);
+              count += 1;
+            }
+          }
+          arquivo.close();
+        } catch (const int e) {
+          cout << "Ocorreu um problema ao ler o arquivo, favor tente novamente" << endl;
+        }
+        break;
+
+      case 2:
+        int resposta_operacao;
+        cout << "Qual modo de operacao deseja fazer? " << endl;
+        cout << "1 - Passo - a - passo" << endl;
+        cout << "2 - Direta" << endl;
+        cin >> resposta_operacao;
+
+        ElementosInstrucao instrucao;
+        if (resposta_operacao == 1) {
+          PC = 0;
+          clock = 0;
+          while (PC < count*4){
+            
+            cout << "\n\n*** PC: " << PC << endl;
+            if (PC != 0) system("pause");
+            estagio_1(memoria_de_instrucoes);
+            cout << endl;
+            system("pause");
+            instrucao = estagio_2(unidade, bancoReg);
+            cout << endl;
+            system("pause");
+            estagio_3(unidade, alu, instrucao);
+            cout << endl;
+            system("pause");
+            estagio_4(memoria_de_dados, unidade);
+            cout << endl;
+            system("pause");
+            estagio_5(bancoReg, unidade);
+
+          }
+        } else if (resposta_operacao == 2) {
+          PC = 0;
+          clock = 0;
+          while (PC < count*4){
+            
+            cout << "\n\n*** PC: " << PC << endl;
+            estagio_1(memoria_de_instrucoes);
+            instrucao = estagio_2(unidade, bancoReg);
+            estagio_3(unidade, alu, instrucao);
+            estagio_4(memoria_de_dados, unidade);
+            estagio_5(bancoReg, unidade);
+
+          }
+        } else {
+          cout << "Operacao invalida, tente novamente!" << endl;
+        }
+        break;
+
+      case 3:
+        bancoReg->limpaBanco();
+        memoria_de_dados->limpaMemoria();
+        cout << "Banco de Registradores e Memória de Dados limpos";
+        break;
+
+      case 4:
         exit(0);
-      }
-      long long int valor_convertido = converteBinarioParaInteiro(str);
-      memoria_de_instrucoes->insereInstrucao(count, valor_convertido);
-      count += 1;
+
+      default:
+        cout << "Operacao invalida, tente novamente!" << endl;
+        break;
     }
-  }
-  arquivo.close();
-
-  ElementosInstrucao instrucao;
-
-
-
-  while(PC < count*4){
-  
-  cout << "\n\n*** PC: " << PC << endl;
-  estagio_1(memoria_de_instrucoes);
-  instrucao = estagio_2(unidade, bancoReg);
-  estagio_3(unidade, alu, instrucao);
-  estagio_4(memoria_de_dados, unidade);
-  estagio_5(bancoReg, unidade);
-
   }
 
 }

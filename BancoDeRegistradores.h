@@ -41,6 +41,12 @@ class BancoDeRegistradores {
       registradores[wReg] = wData;
       return 1;
     };
+
+    void limpaBanco() {
+      for(int i = 0; i < 32; i++){
+        registradores[i] = 0;
+      }
+    }
 };
 
 #endif // BANCODEREGISTRADORES_H_INCLUDED
